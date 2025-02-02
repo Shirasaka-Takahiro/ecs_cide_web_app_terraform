@@ -139,22 +139,21 @@ variable "sans" {
 ##ECR Repository Name
 variable "ecr_repository_role" {
   description = "ECR repository role"
-  type        = string
-  default     = "web"
+  type        = list(string)
+  default     = ["web", "app"]
 }
 
 ##Docker Image Name
 variable "docker_image_name" {
   description = "Docker Image name"
-  type        = string
-  default     = ""
+  type        = list(string)
 }
 
 ##Fargate task Role
 variable "task_role" {
   description = "fargate task role"
   type        = string
-  default     = "web"
+  default     = "web_app"
 }
 
 ##Fargate CPU

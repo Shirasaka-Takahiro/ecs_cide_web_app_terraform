@@ -126,15 +126,16 @@ module "acm_alb" {
 module "ecs" {
   source = "../../module/ecs"
 
-  general_config     = var.general_config
-  task_role          = var.task_role
-  blue_tg_arn        = module.alb.blue_tg_arn
-  ecr_repository_url = module.ecr.ecr_repository_url
-  fargate_cpu        = var.fargate_cpu
-  fargate_memory     = var.fargate_memory
-  dmz_subnet_ids     = module.network.dmz_subnet_ids
-  internal_sg_id     = module.internal_sg.security_group_id
-  iam_ecs_arn        = module.iam_ecs.iam_role_arn
+  general_config         = var.general_config
+  task_role              = var.task_role
+  blue_tg_arn            = module.alb.blue_tg_arn
+  ecr_repository_web_url = module.ecr.ecr_repository_web_url
+  ecr_repository_app_url = module.ecr.ecr_repository_app_url
+  fargate_cpu            = var.fargate_cpu
+  fargate_memory         = var.fargate_memory
+  dmz_subnet_ids         = module.network.dmz_subnet_ids
+  internal_sg_id         = module.internal_sg.security_group_id
+  iam_ecs_arn            = module.iam_ecs.iam_role_arn
 }
 
 ##ECR
@@ -167,15 +168,16 @@ module "codestarconnections" {
 module "codebuild" {
   source = "../../module/codebuild"
 
-  general_config     = var.general_config
-  region             = var.region
-  ecr_repository_url = module.ecr.ecr_repository_url
-  iam_codebuild_arn  = module.iam_codebuild.iam_role_arn
-  task_role          = var.task_role
-  execution_role_arn = module.iam_ecs.iam_role_arn
-  vpc_id             = module.network.vpc_id
-  dmz_subnet_ids     = module.network.dmz_subnet_ids
-  internal_sg_id     = module.internal_sg.security_group_id
+  general_config         = var.general_config
+  region                 = var.region
+  ecr_repository_web_url = module.ecr.ecr_repository_web_url
+  ecr_repository_app_url = module.ecr.ecr_repository_app_url
+  iam_codebuild_arn      = module.iam_codebuild.iam_role_arn
+  task_role              = var.task_role
+  execution_role_arn     = module.iam_ecs.iam_role_arn
+  vpc_id                 = module.network.vpc_id
+  dmz_subnet_ids         = module.network.dmz_subnet_ids
+  internal_sg_id         = module.internal_sg.security_group_id
 }
 
 ##CodeDeploy
