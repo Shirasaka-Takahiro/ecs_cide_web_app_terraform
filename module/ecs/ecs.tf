@@ -28,6 +28,10 @@ resource "aws_ecs_task_definition" "task" {
     "FARGATE"
   ]
 
+  volume {
+    name = "php-fpm-socket"
+  }
+
 }
 
 ##Service

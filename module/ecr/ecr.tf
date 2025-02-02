@@ -22,10 +22,10 @@ resource "null_resource" "default" {
   }
 
   provisioner "local-exec" {
-    command = "docker tag ${each.value}:latest ${aws_ecr_repository.default[each.key]}:latest"
+    command = "docker tag ${each.value}:latest ${aws_ecr_repository.default[each.key].repository_url}:latest"
   }
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.default[each.key]}:latest"
+    command = "docker push ${aws_ecr_repository.default[each.key].repository_url}:latest"
   }
 }
