@@ -2,7 +2,8 @@ variable "general_config" {
   type = map(any)
 }
 variable "region" {}
-variable "ecr_repository_url" {}
+variable "ecr_repository_web_url" {}
+variable "ecr_repository_app_url" {}
 variable "iam_codebuild_arn" {}
 variable "task_role" {}
 variable "execution_role_arn" {}

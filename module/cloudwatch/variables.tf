@@ -1,4 +1,6 @@
 variable "general_config" {
   type = map(any)
 }
-variable "task_role" {}
+variable "ecs_prefix" {
+  type = list(string)
+}

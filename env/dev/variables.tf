@@ -170,6 +170,13 @@ variable "fargate_memory" {
   default     = "512"
 }
 
+##CloudWatch
+variable "ecs_prefix" {
+  description = "CloudWatch log group prefix"
+  type        = list(string)
+  default     = ["web", "app"]
+}
+
 ##CodeStarConnections
 variable "repository_role" {
   description = "Code Start Connections repository role"

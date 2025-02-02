@@ -64,8 +64,6 @@ resource "aws_codepipeline" "pipeline" {
         TaskDefinitionTemplatePath     = "taskdef.json"
         AppSpecTemplateArtifact        = "build_output"
         AppSpecTemplatePath            = "appspec.yml"
-        Image1ArtifactName             = "build_output"
-        Image1ContainerName            = "IMAGE1_NAME"
       }
     }
   }

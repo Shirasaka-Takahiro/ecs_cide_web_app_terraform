@@ -27,6 +27,12 @@ CodePipeline
 CloudWatch
 <br />
 
+■Caution
+Need to edit nginx conf depending on a developing environment
+<br />
+1. Use localhost:9000 on ECS on Fargate
+2. Use fastcgi_pass app01:9000 on docker-compose
+
 ■Deploy
 1. Move to direstory
 2. terraform init

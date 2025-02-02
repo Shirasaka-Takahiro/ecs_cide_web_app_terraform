@@ -35,6 +35,16 @@ resource "aws_codebuild_project" "project" {
     }
 
     environment_variable {
+      name  = "ecr_repository_web_url"
+      value = var.ecr_repository_web_url
+    }
+
+    environment_variable {
+      name  = "ecr_repository_app_url"
+      value = var.ecr_repository_app_url
+    }
+
+    environment_variable {
       name  = "REGION"
       value = var.region
     }
@@ -42,11 +52,6 @@ resource "aws_codebuild_project" "project" {
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       value = data.aws_caller_identity.self.account_id
-    }
-
-    environment_variable {
-      name  = "ECR_REPOSITORY_URL"
-      value = var.ecr_repository_url
     }
 
     environment_variable {

@@ -13,10 +13,10 @@ resource "aws_ecs_task_definition" "task" {
   family = "${var.general_config["project"]}-${var.general_config["env"]}-${var.task_role}-task"
   container_definitions = templatefile("${path.module}/container_definition.json",
     {
-      project            = var.general_config["project"],
-      env                = var.general_config["env"],
-      task_role          = var.task_role,
-      ecr_repository_url = var.ecr_repository_url
+      project                = var.general_config["project"],
+      env                    = var.general_config["env"],
+      ecr_repository_web_url = var.ecr_repository_web_url,
+      ecr_repository_app_url = var.ecr_repository_app_url
     }
   )
   cpu                = var.fargate_cpu
@@ -41,7 +41,7 @@ resource "aws_ecs_service" "service" {
 
   load_balancer {
     target_group_arn = var.blue_tg_arn
-    container_name   = "${var.general_config["project"]}-${var.general_config["env"]}-${var.task_role}-container"
+    container_name   = "${var.general_config["project"]}-${var.general_config["env"]}-web-container"
     container_port   = "80"
   }
 

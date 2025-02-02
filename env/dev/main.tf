@@ -153,7 +153,7 @@ module "cloudwatch" {
   source = "../../module/cloudwatch"
 
   general_config = var.general_config
-  task_role      = var.task_role
+  ecs_prefix     = var.ecs_prefix
 }
 
 ##CodeStarConnections

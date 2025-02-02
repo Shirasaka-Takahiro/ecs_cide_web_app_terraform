@@ -6,7 +6,8 @@ phases:
       # 環境変数の設定
       - AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
       - REGION=${REGION}
-      - ECR_REPOSITORY_URL=${ECR_REPOSITORY_URL}
+      - ECR_REPOSITORY_WEB_URL=${ecr_repository_web_url}
+      - ECR_REPOSITORY_APP_URL=${ecr_repository_app_url}
       # コミットハッシュの先頭7桁をタグに利用する
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
@@ -16,19 +17,29 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build ./docker -t $ECR_REPOSITORY_URL:latest
-      - docker tag $ECR_REPOSITORY_URL:latest $ECR_REPOSITORY_URL:$IMAGE_TAG
+      - echo Building the Web Docker image...
+      - docker build ./docker/web -t $ECR_REPOSITORY_WEB_URL:latest
+      - docker tag $ECR_REPOSITORY_WEB_URL:latest $ECR_REPOSITORY_WEB_URL:$IMAGE_TAG
+      - echo Building the App Docker image...
+      - docker build ./docker/app -t $ECR_REPOSITORY_APP_URL:latest
+      - docker tag $ECR_REPOSITORY_APP_URL:latest $ECR_REPOSITORY_APP_URL:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push $ECR_REPOSITORY_URL:latest
-      - docker push $ECR_REPOSITORY_URL:$IMAGE_TAG
+      - echo Pushing the Web Docker images...
+      - docker push $ECR_REPOSITORY_WEB_URL:latest
+      - docker push $ECR_REPOSITORY_WEB_URL:$IMAGE_TAG
+      - echo Pushing the App Docker images...
+      - docker push $ECR_REPOSITORY_APP_URL:latest
+      - docker push $ECR_REPOSITORY_APP_URL:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '{"ImageURI":"%s"}' $ECR_REPOSITORY_URL:$IMAGE_TAG > imageDetail.json
+      - printf '{"ImageURI":"%s"}' $ECR_REPOSITORY_WEB_URL:$IMAGE_TAG > imageDetail.json
+      - printf '{"ImageURI":"%s"}' $ECR_REPOSITORY_APP_URL:$IMAGE_TAG > imageDetail.json
       - echo Rewriting task definitions file...
       - sed -i -e "s#<project>#$project#g" module/codebuild/taskdef.json
+      - sed -i -e "s#<env>#$env#g" module/codebuild/taskdef.json
+      - sed -i -e "s#<ecr_repository_web_url>#$ecr_repository_web_url#g" module/codebuild/taskdef.json
+      - sed -i -e "s#<ecr_repository_app_url>#$ecr_repository_app_url#g" module/codebuild/taskdef.json
       - sed -i -e "s#<env>#$env#g" module/codebuild/taskdef.json
       - sed -i -e "s#<task_role>#$task_role#g" module/codebuild/taskdef.json
       - sed -i -e "s#<execution_role_arn>#$execution_role_arn#g" module/codebuild/taskdef.json
@@ -37,7 +48,6 @@ phases:
       - echo Rewriting appspec file...
       - sed -i -e "s#<project>#$project#g" module/codebuild/appspec.yml
       - sed -i -e "s#<env>#$env#g" module/codebuild/appspec.yml
-      - sed -i -e "s#<task_role>#$task_role#g" module/codebuild/appspec.yml
       - echo Finished Rewriting appspec file
       - cp module/codebuild/appspec.yml ./
 artifacts:
