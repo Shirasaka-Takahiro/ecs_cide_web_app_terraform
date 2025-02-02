@@ -1,0 +1,21 @@
+version: "3"
+services:
+  web01:
+    build: ./web
+    container_name: web01
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./web/src:/var/www/vhosts/quick-infra.net/public_html
+
+  app01:
+    build: ./app
+    container_name: app01
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./app/src:/var/www/vhosts/quick-infra.net/public_html
+    depends_on:
+      - web01
