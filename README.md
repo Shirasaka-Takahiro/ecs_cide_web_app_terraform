@@ -8,7 +8,7 @@ README.md
 <br />
 Network
 <br />
-ECS Fargate
+ECS Fargate (Web and app)
 <br />
 ACM
 <br />
